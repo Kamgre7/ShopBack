@@ -1,8 +1,8 @@
 import cors from 'cors';
-import express, {json} from 'express';
+import express, { json } from 'express';
 import rateLimit from 'express-rate-limit';
-import {config} from './config/config';
-import {homeRouter} from './routes/home';
+import { config } from './config/config';
+import { homeRouter } from './routes/home';
 
 const app = express();
 
