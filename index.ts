@@ -3,7 +3,7 @@ import express, { json } from 'express';
 import rateLimit from 'express-rate-limit';
 import { config } from './config/config';
 import { homeRouter } from './routes/home';
-import { productsRouter } from './routes/produtct';
+import { productRouter } from './routes/product';
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(rateLimit({
 }));
 
 app.use('/', homeRouter);
-app.use('/product', productsRouter);
+app.use('/product', productRouter);
 
 app.listen(3001, '127.0.0.1', () => {
   console.log('Listening on port http://localhost:3001');
