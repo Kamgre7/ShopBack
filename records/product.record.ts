@@ -39,6 +39,8 @@ export class ProductRecord {
   }
 
   async insert(): Promise<void> {
-
+    this.id = this.id ?? uuid();
+    this.createdAt = this.createdAt ?? new Date().toISOString().slice(0, 19).replace('T', ' ');
+    console.log(this);
   }
 }

@@ -7,12 +7,13 @@ export interface ProductEntityProperty {
   description: string;
   sku: string;
   categoryId: string;
-  img: string
 }
 
 export interface ProductEntityForm extends ProductEntityProperty {
   quantity: string;
   price: string;
+  img: Blob;
+  photoFileName: string;
 }
 
 export interface ProductEntity extends ProductEntityProperty {
@@ -20,4 +21,5 @@ export interface ProductEntity extends ProductEntityProperty {
   quantity: number;
   price: number;
   createdAt?: string;
+  img: string
 }
