@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import multer, { diskStorage } from 'multer';
+import { ProductRecord } from '../records/product.record';
+import { ProductEntityForm } from '../types';
 
 export const productsRouter = Router();
 
@@ -12,7 +14,6 @@ const storage = diskStorage({
     cb(null, 'images');
   },
   filename: (req, file, cb) => {
-    console.log(file);
     fileProperty.filename = file.originalname;
     cb(null, file.originalname);
   },
@@ -21,15 +22,23 @@ const storage = diskStorage({
 const upload = multer({ storage });
 
 productsRouter
-  .get('/', (req, res) => {
-
+  .get('/', async (req, res) => {
+    console.log(await ProductRecord.getAll());
   })
   .post('/form', upload.single('photo'), (req, res) => {
     const {
-      name, description, quantity, price, sku, category,
-    } = req.body;
-    console.log({
-      name, description, quantity, price, sku, category,
-    }, fileProperty.filename);
+      name, description, quantity, price, sku, categoryId,
+    }: ProductEntityForm = req.body;
+
+    const newProduct = new ProductRecord({
+      name,
+      description,
+      quantity: Number(quantity),
+      price: Number(price),
+      sku,
+      categoryId,
+      img: fileProperty.filename,
+    });
+
     res.send('img uploaded');
   });
