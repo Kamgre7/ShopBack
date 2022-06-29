@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ProductRecord } from '../records/product.record';
 import { ProductEntityForm } from '../types';
 import { upload } from '../utils/storage';
+import { filePathToFileName } from '../utils/filePathToFileName';
 
 export const productRouter = Router();
 
@@ -10,9 +11,9 @@ productRouter
     console.log(await ProductRecord.getAll());
   })
 
-  .post('/form', upload.single('photo'), (req, res) => {
+  .post('/form', upload.single('img'), (req, res) => {
     const {
-      name, description, quantity, price, sku, categoryId, photoFileName,
+      name, description, quantity, price, sku, categoryId, imgFileName,
     }: ProductEntityForm = req.body;
 
     const newProduct = new ProductRecord({
@@ -22,7 +23,7 @@ productRouter
       price: parseFloat(price),
       sku,
       categoryId,
-      img: photoFileName[0].split('\\')[2].split('.')[0],
+      img: filePathToFileName(imgFileName),
     });
 
     console.log(newProduct.insert());
