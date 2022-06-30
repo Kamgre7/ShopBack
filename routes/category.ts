@@ -7,11 +7,12 @@ import { filePathToFileName } from '../utils/filePathToFileName';
 export const categoryRouter = Router();
 
 categoryRouter
-  .get('/', (req, res) => {
-
+  .get('/', async (req, res) => {
+    const allCategories = await CategoryRecord.getAll();
+    console.log(allCategories);
   })
 
-  .post('/form', upload.single('img'), (req, res) => {
+  .post('/form', upload.single('img'), async (req, res) => {
     const {
       name, description, imgFileName,
     }: CategoryEntityForm = req.body;
@@ -22,5 +23,6 @@ categoryRouter
       img: filePathToFileName(imgFileName),
     });
 
-    console.log(newCategory.insert());
+    const result = await newCategory.insert();
+    return res.json(result);
   });

@@ -1,3 +1,7 @@
+import { FieldPacket } from 'mysql2';
+
+export type CategoryRecordResult = [CategoryEntity[], FieldPacket[]];
+
 export interface CategoryEntityProperty {
   name: string;
   description: string;
