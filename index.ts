@@ -1,10 +1,12 @@
 import cors from 'cors';
 import express, { json } from 'express';
 import rateLimit from 'express-rate-limit';
+import 'express-async-errors';
 import { config } from './config/config';
 import { categoryRouter } from './routes/category';
 import { homeRouter } from './routes/home';
 import { productRouter } from './routes/product';
+import { handleError } from './utils/errors';
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(rateLimit({
 app.use('/', homeRouter);
 app.use('/product', productRouter);
 app.use('/category', categoryRouter);
+
+app.use(handleError);
 
 app.listen(3001, '127.0.0.1', () => {
   console.log('Listening on port http://localhost:3001');
