@@ -9,7 +9,6 @@ export interface CategoryEntityProperty {
 
 export interface CategoryEntityForm extends CategoryEntityProperty {
   img: Blob;
-  imgFileName: string;
 }
 
 export interface CategoryEntity extends CategoryEntityProperty {

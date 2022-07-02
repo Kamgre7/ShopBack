@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { CategoryEntityForm } from '../types';
 import { upload } from '../utils/storage';
 import { CategoryRecord } from '../records/category.record';
-import { filePathToFileName } from '../utils/filePathToFileName';
 import { ValidationError } from '../utils/errors';
 
 export const categoryRouter = Router();
@@ -25,7 +24,7 @@ categoryRouter
 
   .post('/form', upload.single('img'), async (req, res) => {
     const {
-      name, description, imgFileName,
+      name, description,
     }: CategoryEntityForm = req.body;
 
     const allCategories = await CategoryRecord.getAll();
@@ -38,7 +37,7 @@ categoryRouter
     const newCategory = new CategoryRecord({
       name,
       description,
-      img: filePathToFileName(imgFileName),
+      img: req.file.originalname,
     });
 
     const result = await newCategory.insert();

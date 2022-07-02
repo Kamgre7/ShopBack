@@ -1,7 +1,8 @@
 import cors from 'cors';
-import express, { json } from 'express';
+import express, { json, static as staticExpress } from 'express';
 import rateLimit from 'express-rate-limit';
 import 'express-async-errors';
+import { join } from 'path';
 import { config } from './config/config';
 import { categoryRouter } from './routes/category';
 import { homeRouter } from './routes/home';
@@ -10,6 +11,7 @@ import { handleError } from './utils/errors';
 
 const app = express();
 
+app.use(staticExpress(join(__dirname, 'images')));
 app.use(cors({
   origin: config.corsOrigin,
 }));
