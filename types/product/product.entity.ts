@@ -13,7 +13,6 @@ export interface ProductEntityForm extends ProductEntityProperty {
   quantity: string;
   price: string;
   img: Blob;
-  imgFileName: string;
 }
 
 export interface ProductEntity extends ProductEntityProperty {

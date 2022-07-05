@@ -2,18 +2,19 @@ import { Router } from 'express';
 import { ProductRecord } from '../records/product.record';
 import { ProductEntityForm } from '../types';
 import { upload } from '../utils/storage';
-import { filePathToFileName } from '../utils/filePathToFileName';
+import { ValidationError } from '../utils/errors';
 
 export const productRouter = Router();
 
 productRouter
   .get('/', async (req, res) => {
-    console.log(await ProductRecord.getAll());
+    const allProducts = await ProductRecord.getAll();
+    res.json(allProducts);
   })
 
-  .post('/form', upload.single('img'), (req, res) => {
+  .post('/form', upload.single('img'), async (req, res) => {
     const {
-      name, description, quantity, price, sku, categoryId, imgFileName,
+      name, description, quantity, price, sku, categoryId,
     }: ProductEntityForm = req.body;
 
     const newProduct = new ProductRecord({
@@ -23,9 +24,16 @@ productRouter
       price: parseFloat(price),
       sku,
       categoryId,
-      img: filePathToFileName(imgFileName),
+      img: req.file.originalname,
     });
 
-    console.log(newProduct.insert());
-    res.send('img uploaded');
+    const allProducts = await ProductRecord.getAll();
+    const findDuplicate = allProducts.filter((product) => product.name === name);
+
+    if (findDuplicate.length > 0) {
+      throw new ValidationError('This product name is already taken. Try other one.');
+    }
+
+    const result = await newProduct.insert();
+    res.json(result);
   });

@@ -41,5 +41,5 @@ categoryRouter
     });
 
     const result = await newCategory.insert();
-    return res.json(result);
+    res.json(result);
   });

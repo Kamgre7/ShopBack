@@ -1,23 +1,25 @@
 import { v4 as uuid } from 'uuid';
 import { ProductEntity, ProductRecordResult } from '../types';
 import { pool } from '../utils/db';
+import { ValidationError } from '../utils/errors';
+import { createDate } from '../utils/validation.entity';
 
 export class ProductRecord {
   id?: string;
 
-  private name: string;
+  name: string;
 
-  private description: string;
+  description: string;
 
-  private quantity: number;
+  quantity: number;
 
-  private price: number;
+  price: number;
 
-  private sku: string;
+  sku: string;
 
-  private categoryId: string;
+  categoryId: string;
 
-  private img: string;
+  img: string;
 
   createdAt?: string;
 
@@ -33,14 +35,32 @@ export class ProductRecord {
     this.createdAt = newProductEntity.createdAt;
   }
 
-  static async getAll(): Promise<void> {
+  static async getAll(): Promise<ProductEntity[]> {
     const [result] = (await pool.execute('SELECT * FROM `product`') as ProductRecordResult);
-    console.log(result);
+    return result.map((product) => new ProductRecord(product));
   }
 
-  async insert(): Promise<void> {
-    this.id = this.id ?? uuid();
-    this.createdAt = this.createdAt ?? new Date().toISOString().slice(0, 19).replace('T', ' ');
-    console.log(this);
+  async insert(): Promise<string> {
+    if (!this.id) {
+      this.id = uuid();
+    } else {
+      throw new ValidationError('Cannot insert something that is already inserted');
+    }
+
+    this.createdAt = this.createdAt ?? createDate();
+
+    await pool.execute('INSERT INTO `product` VALUES(:id, :name, :description, :quantity, :price, :sku, :categoryId, :img, :createdAt)', {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      quantity: this.quantity,
+      price: this.price,
+      sku: this.sku,
+      categoryId: this.categoryId,
+      img: this.img,
+      createdAt: this.createdAt,
+    });
+
+    return this.id;
   }
 }
