@@ -9,7 +9,20 @@ export const productRouter = Router();
 productRouter
   .get('/', async (req, res) => {
     const allProducts = await ProductRecord.getAll();
+
     res.json(allProducts);
+  })
+
+  .get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const product = await ProductRecord.getOne(id);
+
+    if (product === null) {
+      throw new ValidationError('Cannot find category');
+    }
+
+    res.json(product);
   })
 
   .post('/form', upload.single('img'), async (req, res) => {
@@ -35,5 +48,6 @@ productRouter
     }
 
     const result = await newProduct.insert();
+
     res.json(result);
   });

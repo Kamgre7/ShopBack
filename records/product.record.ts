@@ -40,6 +40,14 @@ export class ProductRecord {
     return result.map((product) => new ProductRecord(product));
   }
 
+  static async getOne(id:string):Promise<ProductEntity | null> {
+    const [product] = await pool.execute('SELECT * FROM `product` WHERE `id`=:id', {
+      id,
+    }) as ProductRecordResult;
+
+    return product.length === 0 ? null : new ProductRecord(product[0]);
+  }
+
   async insert(): Promise<string> {
     if (!this.id) {
       this.id = uuid();
