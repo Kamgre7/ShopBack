@@ -36,7 +36,7 @@ export class ProductRecord {
   }
 
   static async getAll(): Promise<ProductEntity[]> {
-    const [result] = (await pool.execute('SELECT * FROM `product`') as ProductRecordResult);
+    const [result] = (await pool.execute('SELECT * FROM `product` ORDER BY `categoryId`') as ProductRecordResult);
     return result.map((product) => new ProductRecord(product));
   }
 
@@ -48,7 +48,7 @@ export class ProductRecord {
     return product.length === 0 ? null : new ProductRecord(product[0]);
   }
 
-  async insert(): Promise<string> {
+  async insert(): Promise<ProductEntity> {
     if (!this.id) {
       this.id = uuid();
     } else {
@@ -69,6 +69,6 @@ export class ProductRecord {
       createdAt: this.createdAt,
     });
 
-    return this.id;
+    return this;
   }
 }

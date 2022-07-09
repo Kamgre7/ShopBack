@@ -34,7 +34,7 @@ export class CategoryRecord {
     return result.map((category) => new CategoryRecord(category));
   }
 
-  async insert(): Promise<string> {
+  async insert(): Promise<CategoryEntity> {
     if (!this.id) {
       this.id = uuid();
     } else {
@@ -51,7 +51,7 @@ export class CategoryRecord {
       createdAt: this.createdAt,
     });
 
-    return this.id;
+    return this;
   }
 
   static async getOne(id:string): Promise<CategoryEntity | null> {
