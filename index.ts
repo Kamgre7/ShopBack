@@ -8,6 +8,7 @@ import { categoryRouter } from './routes/category';
 import { homeRouter } from './routes/home';
 import { productRouter } from './routes/product';
 import { handleError } from './utils/errors';
+import { cartRouter } from './routes/cart';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(rateLimit({
 app.use('/', homeRouter);
 app.use('/product', productRouter);
 app.use('/category', categoryRouter);
+app.use('/cart', cartRouter);
 
 app.use(handleError);
 
