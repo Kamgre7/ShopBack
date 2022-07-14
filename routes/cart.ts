@@ -9,10 +9,6 @@ import { CartRecord } from '../records/cart.record';
 export const cartRouter = Router();
 
 cartRouter
-  .get('/', (req, res) => {
-
-  })
-
   .post('/', async (req, res) => {
     const cart = req.body.cart as CartEntityProperty[];
 
@@ -40,8 +36,4 @@ cartRouter
       totalCost: basket.totalCost(),
       totalItems: basket.totalItemsLength(),
     } as CartResponse);
-  })
-
-  .delete('/', (req, res) => {
-
   });
