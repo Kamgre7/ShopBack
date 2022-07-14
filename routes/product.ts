@@ -63,4 +63,23 @@ productRouter
     await product.delete();
 
     res.json('ok');
+  })
+
+  .patch('/:id', async (req, res) => {
+    const { id } = req.params;
+    const {
+      name, description, quantity, price, sku, categoryId,
+    }: ProductEntityForm = req.body;
+
+    console.log(name, description, quantity, price, sku, categoryId);
+
+    const product = await ProductRecord.getOne(id);
+
+    if (product === null) {
+      throw new ValidationError('Cannot find product of this ID.');
+    }
+
+    const updatedProduct = await product.update();
+
+    res.json(updatedProduct);
   });

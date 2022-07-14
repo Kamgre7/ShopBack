@@ -77,4 +77,19 @@ export class ProductRecord {
 
     return this;
   }
+
+  async update():Promise<ProductRecord> {
+    await pool.execute('UPDATE `product` SET `name`=:name, `description`=:description, `quantity`=:quantity, `price`=:price, `sku`=:sku, `categoryId`=:categoryId, `img`=:img WHERE `id`=:id', {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      quantity: this.quantity,
+      price: this.price,
+      sku: this.sku,
+      categoryId: this.categoryId,
+      img: this.img,
+    });
+
+    return this;
+  }
 }

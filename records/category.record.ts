@@ -29,12 +29,12 @@ export class CategoryRecord {
     this.createdAt = newCategoryEntity.createdAt;
   }
 
-  static async getAll():Promise<CategoryEntity[]> {
+  static async getAll():Promise<CategoryRecord[]> {
     const [result] = await pool.execute('SELECT * FROM `product_category` ORDER BY `name` ASC') as CategoryRecordResult;
     return result.map((category) => new CategoryRecord(category));
   }
 
-  async insert(): Promise<CategoryEntity> {
+  async insert(): Promise<CategoryRecord> {
     if (!this.id) {
       this.id = uuid();
     } else {
@@ -54,7 +54,7 @@ export class CategoryRecord {
     return this;
   }
 
-  static async getOne(id:string): Promise<CategoryEntity | null> {
+  static async getOne(id:string): Promise<CategoryRecord | null> {
     const [findCategory] = await pool.execute('SELECT * FROM `product_category` WHERE `id`=:id', {
       id,
     }) as CategoryRecordResult;
