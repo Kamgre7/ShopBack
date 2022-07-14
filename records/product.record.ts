@@ -35,12 +35,12 @@ export class ProductRecord {
     this.createdAt = newProductEntity.createdAt;
   }
 
-  static async getAll(): Promise<ProductEntity[]> {
+  static async getAll(): Promise<ProductRecord[]> {
     const [result] = (await pool.execute('SELECT * FROM `product` ORDER BY `categoryId`') as ProductRecordResult);
     return result.map((product) => new ProductRecord(product));
   }
 
-  static async getOne(id:string):Promise<ProductEntity | null> {
+  static async getOne(id:string):Promise<ProductRecord | null> {
     const [product] = await pool.execute('SELECT * FROM `product` WHERE `id`=:id', {
       id,
     }) as ProductRecordResult;
@@ -48,7 +48,13 @@ export class ProductRecord {
     return product.length === 0 ? null : new ProductRecord(product[0]);
   }
 
-  async insert(): Promise<ProductEntity> {
+  async delete(): Promise<void> {
+    await pool.execute('DELETE FROM `product` WHERE `id`=:id', {
+      id: this.id,
+    });
+  }
+
+  async insert(): Promise<ProductRecord> {
     if (!this.id) {
       this.id = uuid();
     } else {

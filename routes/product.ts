@@ -19,7 +19,7 @@ productRouter
     const product = await ProductRecord.getOne(id);
 
     if (product === null) {
-      throw new ValidationError('Cannot find category');
+      throw new ValidationError('Cannot find product');
     }
 
     res.json(product);
@@ -50,4 +50,17 @@ productRouter
     const result = await newProduct.insert();
 
     res.json(result);
+  })
+
+  .delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await ProductRecord.getOne(id);
+
+    if (product === null) {
+      throw new ValidationError('Cannot find product');
+    }
+
+    await product.delete();
+
+    res.json('ok');
   });
